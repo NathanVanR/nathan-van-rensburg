@@ -1,0 +1,114 @@
+:root {
+    --parchment: #f9f7f2;
+    --ink: #1c1c1c;
+    --accent: #7a1f1f; /* Oxblood / Illuminated Red */
+    --rule: #d1cdc0;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--parchment);
+    color: var(--ink);
+    font-family: 'EB Garamond', serif;
+    line-height: 1.6;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    padding: 4rem 1rem;
+}
+
+.container {
+    max-width: 650px;
+    width: 100%;
+}
+
+header {
+    margin-bottom: 5rem;
+    text-align: center;
+}
+
+h1 {
+    font-family: 'IM Fell English', serif;
+    font-weight: 400;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: -1px;
+}
+
+.subtitle {
+    font-style: italic;
+    color: var(--accent);
+    font-size: 1.1rem;
+}
+
+.toc {
+    list-style: none;
+    padding: 0;
+}
+
+.toc-item {
+    margin-bottom: 3rem;
+    position: relative;
+}
+
+.toc-number {
+    font-family: 'IM Fell English', serif;
+    font-size: 1.2rem;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 0.2rem;
+}
+
+.toc-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--ink);
+    border-bottom: 1px solid transparent;
+    transition: border-bottom 0.3s ease;
+}
+
+.toc-title:hover {
+    border-bottom: 1px solid var(--ink);
+}
+
+.toc-description {
+    margin-top: 0.8rem;
+    font-size: 1.1rem;
+    max-width: 90%;
+    color: #444;
+}
+
+.marginalia {
+    font-family: 'Ms Madi', cursive;
+    font-size: 1.5rem;
+    color: #666;
+    display: block;
+    margin-top: 1rem;
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid var(--rule);
+    margin: 4rem 0;
+}
+
+footer {
+    margin-top: 6rem;
+    font-size: 0.9rem;
+    text-align: center;
+    font-style: italic;
+    opacity: 0.7;
+}
+
+.fade-in {
+    animation: fadeIn 1.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
