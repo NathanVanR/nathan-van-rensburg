@@ -112,3 +112,37 @@ footer {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
 }
+
+.project-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 2rem;
+}
+
+.project-item {
+    margin-bottom: 2rem;
+}
+
+.project-item h3 {
+    font-family: 'IM Fell English', serif;
+    font-size: 1.5rem;
+    color: var(--ink);
+    margin-bottom: 0.5rem;
+}
+
+.project-item p {
+    font-size: 1rem;
+    color: var(--ink);
+    margin-bottom: 0.8rem;
+}
+
+.project-item a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-bottom 0.3s ease;
+}
+
+.project-item a:hover {
+    border-bottom: 1px solid var(--accent);
+}
