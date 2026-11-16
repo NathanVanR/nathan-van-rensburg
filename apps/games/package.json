@@ -7,7 +7,7 @@
     "dev": "vite --port 5600",
     "build": "vite build",
     "preview": "vite preview --port 5600",
-    "test": "node --test src/go/rules.test.js src/wordsearch/engine.test.js src/wordsearch/packs.test.js"
+    "test": "node --test src/go/rules.test.js src/wordsearch/engine.test.js src/wordsearch/packs.test.js src/bible/bible.test.js src/wordle/wordle.test.js src/crossword/crossword.test.js src/spot/spot.test.js"
   },
   "dependencies": {
     "react": "^19.3.1",

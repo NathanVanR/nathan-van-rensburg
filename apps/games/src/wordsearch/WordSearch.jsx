@@ -187,7 +187,7 @@ function Maker({ navigate }) {
 }
 
 /* ------------------------------------------------------------------ play */
-function Play({ def, back, navigate, shared, cat, again }) {
+export function Play({ def, back, navigate, shared, cat, again, onSolved }) {
   const key = JSON.stringify([cleanWords(def.words), def.size, def.level, def.seed, def.title, def.message]);
   const puzzle = useMemo(() => generate(def), [key]);
   const id = hashString(key), storeKey = 'games.ws.' + id;
@@ -222,7 +222,7 @@ function Play({ def, back, navigate, shared, cat, again }) {
     setFound(next);
     navigator.vibrate?.(12);
     const finished = next.length === total;
-    if (finished) { setDone(true); setOverlay(true); bumpStat(cat); }
+    if (finished) { setDone(true); setOverlay(true); bumpStat(cat); if (onSolved) onSolved({ secs, hints }); }
     save({ found: next, done: finished });
   };
 
