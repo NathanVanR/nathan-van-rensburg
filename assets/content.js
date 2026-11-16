@@ -19,19 +19,19 @@
           <li data-go="misc"><span class="num">IV.</span><span class="name">Miscellany<small>Loves, hobbies, and the like</small></span><span class="dots"></span><span class="pg-no">9</span></li>
           <li data-go="colophon"><span class="num">V.</span><span class="name">Colophon<small>Correspondence &amp; how this was made</small></span><span class="dots"></span><span class="pg-no">11</span></li>
         </ol>
-        <div class="marg rise" style="--d:2.6s">Turn the page, traveler &mdash;<br>swipe, tap the corner, or pick a ribbon.</div>
+        <div class="marg rise" style="--d:2.6s">Turn the page, traveler.<br>Swipe, tap a corner, or pick an arch.</div>
         <div class="folio">ii</div>` },
 
     { id: 'works', label: 'Works',
       L: () => `${I('arch')}<div class="kicker">Book I · Works</div><h2 class="write">Vouchr</h2>
         <p class="meta">Charity coordination platform · <b>Live</b> · React, Spring Boot, PostgreSQL</p>
-        <p class="initial">A coordination platform for South African charities. Organisations run projects &mdash; a feeding scheme, a glasses drive &mdash; while staff register the people they help, capture witnessed POPIA consent, group them into families and refer them on to partner organisations.</p>
+        <p class="initial">A coordination platform for South African charities. Organisations run projects, such as a feeding scheme or a glasses drive, while staff register the people they help, capture witnessed POPIA consent, group them into families and refer them on to partner organisations.</p>
         <p>Built end to end: a React PWA, a Spring Boot API, a Liquibase-managed schema, Supabase authentication, and a consent contract that seals itself into a hashed PDF.</p>
         <p><a href="https://vouchr.natevr.net">Enter Vouchr &rarr;</a> &nbsp;·&nbsp; <a href="https://vouchr.natevr.net/demo">Try the demo &rarr;</a></p>
         <div class="folio">3</div>`,
       R: () => `<div class="kicker">&nbsp;</div><h2 class="write" style="margin-top:58px">FNB DataQuest</h2>
-        <p class="meta">Hackathon · Collaborative filtering · Python, Pandas, NumPy, scikit-learn</p>
-        <p class="initial">A recommender built for the FNB DataQuest hackathon, shaped after the matrix-factorisation approach of the Netflix Prize. It studied historic transaction behaviour to predict and rank the five financial products a customer would reach for next.</p>
+        <p class="meta">Hackathon, third place · Collaborative filtering · Python, Pandas, NumPy, scikit-learn</p>
+        <p class="initial">A recommender my team built for the FNB DataQuest hackathon, where we came third. Shaped after the matrix-factorisation approach of the Netflix Prize, it studied historic transaction behaviour to predict and rank the five financial products a customer would reach for next.</p>
         <p><a href="https://github.com/NathanVanR/fnb-data-quest" target="_blank">View on GitHub &rarr;</a></p>
         ${F()}
         <p class="meta" style="text-align:center">Further volumes rest on the shelf, to be taken down in due season.</p>
@@ -40,14 +40,14 @@
     { id: 'chronicle', label: 'Chronicle',
       L: () => `${I('quill')}<div class="kicker">Book II · Chronicle</div><h2 class="write">Letters &amp; Essays</h2>
         <p class="meta">Occasional writing</p>
-        <p class="initial">The pen is dry, but the inkwell is full. Posts will appear here now and then &mdash; notes from building things, and from reading old books.</p>
+        <p class="initial">The pen is dry, but the inkwell is full. Posts will appear here now and then: notes from building things, and from reading old books.</p>
         ${F()}
-        <ul class="plain"><li><span class="todo">First entry &mdash; coming soon</span></li></ul>
+        <ul class="plain"><li><span class="todo">First entry coming soon</span></li></ul>
         <div class="marg">Each post a real page, with a real link.</div>
         <div class="folio">5</div>`,
       R: () => `<div class="kicker">&nbsp;</div><h2 class="write" style="margin-top:58px">Steel &amp; Scrolls</h2>
         <p class="meta">A YouTube channel · Literature &amp; the cinematic frame</p>
-        <p class="initial">Inquiries into classical literature and the cinematic frame &mdash; where the sword meets the pen.</p>
+        <p class="initial">Inquiries into classical literature and the cinematic frame. Where the sword meets the pen.</p>
         <p><a href="https://www.youtube.com/@nvanrensburg" target="_blank">Watch on YouTube &rarr;</a></p>
         <div class="folio">6</div>` },
 
@@ -66,14 +66,14 @@
 
     { id: 'misc', label: 'Miscellany',
       L: () => `${I('rose')}<div class="kicker">Book IV · Miscellany</div><h2 class="write">Loves &amp; Pursuits</h2>
-        <p class="initial">I am happiest in stone and silence &mdash; a cathedral nave, a library with a ladder on rails, a gothic spire in fog.</p>
+        <p class="initial">I am happiest in stone and silence: a cathedral nave, a library with a ladder on rails, a gothic spire in fog.</p>
         <ul class="plain cols"><li>Cathedrals &amp; gothic architecture</li><li>Old libraries</li><li>Classical literature</li><li>Cinema</li><li><span class="todo">hobby</span></li><li><span class="todo">hobby</span></li></ul>
         <div class="folio">9</div>`,
       R: () => `${I('ladder')}<div class="kicker">&nbsp;</div><h2 class="write">Marginalia</h2>
         <p class="meta">Things in the margins</p>
         <p><span class="todo">Currently reading &middot; listening &middot; building</span></p>
         <div class="marg">&ldquo;Ink on paper is the only truth.&rdquo;</div>
-        <p class="meta" style="margin-top:1rem">Sketches &amp; verse &mdash; resting in the drawer for now.</p>
+        <p class="meta" style="margin-top:1rem">Sketches &amp; verse rest in the drawer for now.</p>
         <div class="folio">10</div>` },
 
     { id: 'colophon', label: 'Colophon',
@@ -82,7 +82,7 @@
         <ul class="plain"><li><a href="https://github.com/NathanVanR" rel="me">GitHub</a></li><li><a href="https://www.youtube.com/@nvanrensburg">YouTube</a></li></ul>
         <div class="folio">11</div>`,
       R: () => `<div class="kicker">&nbsp;</div><h2 class="write" style="margin-top:58px">How this was made</h2>
-        <p>Set in EB Garamond and IM Fell English. Built with React. Constructed in the tradition of digital minimalism &mdash; no trackers, no cookies, just text.</p>
+        <p>Set in EB Garamond and IM Fell English. Built with React. Constructed in the tradition of digital minimalism: no trackers, no cookies, just text.</p>
         ${F()}
         <div class="marg">Finis coronat opus.</div>
         <div class="folio">12</div>` }
