@@ -34,7 +34,7 @@ export const SIZES = { small: 10, medium: 13, large: 16 };
 export function pickSize(words, wanted) {
   const longest = Math.max(0, ...words.map(w => w.length));
   const letters = words.reduce((n, w) => n + w.length, 0);
-  const auto = Math.ceil(Math.sqrt(letters * 2.4));
+  const auto = Math.ceil(Math.sqrt(letters * 1.9));
   return Math.min(22, Math.max(wanted || 0, longest + 1, auto, 8));
 }
 
@@ -43,7 +43,18 @@ const ALPHABET = 'EEEEEEEEEEEEAAAAAAAAARRRRRRIIIIIIOOOOOOTTTTTTNNNNNNSSSSSSLLLLC
 /** Build a puzzle. Same input always gives the same grid. */
 export function generate({ words, size, level = 'medium', seed = 1 }) {
   const list = cleanWords(words).sort((a, b) => b.length - a.length);
-  const n = pickSize(list, size);
+  const start = pickSize(list, size);
+  let best = null;
+  // If a crowded grid leaves words out, try again one size bigger (still fully deterministic per seed).
+  for (let extra = 0; extra <= 3; extra++) {
+    const attempt = build(list, start + extra, level, seed + extra * 101);
+    if (!best || attempt.unplaced.length < best.unplaced.length) best = attempt;
+    if (attempt.unplaced.length === 0) break;
+  }
+  return best;
+}
+
+function build(list, n, level, seed) {
   const rand = mulberry32(seed);
   const grid = new Array(n * n).fill('');
   const dirs = DIRS[level] || DIRS.medium;

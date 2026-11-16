@@ -3,7 +3,7 @@ import {
   generate, cleanWords, lineCells, snapEnd, matchSelection, placementCells,
   encodePuzzle, decodePuzzle, hashString, LEVELS, SIZES
 } from './engine.js';
-import { PACKS, packById, dailyDef } from './packs.js';
+import { PACKS, packById, dailyDef, buildRound, LEVEL_CFG, LEVEL_KEYS, randomSeed } from './packs.js';
 
 const COLORS = ['#b8412f', '#2f6aa8', '#2f8a63', '#b8892b', '#7a4a9c', '#c0567c', '#3b8a96', '#8a6a3a'];
 const LEVEL_NOTE = { easy: 'Across and down', medium: 'Plus diagonals', hard: 'Every direction, backwards too' };
@@ -23,14 +23,24 @@ async function shareOrCopy(url, title, flash) {
   catch { window.prompt('Copy this link', url); }
 }
 
+const getLevel = () => { const l = store.get('games.ws.level'); return LEVEL_KEYS.includes(l) ? l : 'medium'; };
+const bumpStat = cat => { if (!cat) return; const st = store.get('games.ws.stats') || {}; st[cat] = (st[cat] || 0) + 1; store.set('games.ws.stats', st); };
+
 export default function WordSearch({ path, navigate }) {
   const parts = path.split('/').filter(Boolean); // after "ws"
   if (parts[0] === 'make') return <Maker navigate={navigate} />;
-  if (parts[0] === 'daily') return <Play key="daily" def={dailyDef()} back="/ws" navigate={navigate} />;
+  if (parts[0] === 'daily') {
+    const level = LEVEL_KEYS.includes(parts[1]) ? parts[1] : getLevel();
+    return <Play key={'daily' + level} def={dailyDef(level)} back="/ws" navigate={navigate} cat="daily" />;
+  }
   if (parts[0] === 'pack') {
     const pack = packById(parts[1]);
     if (!pack) return <Home navigate={navigate} />;
-    return <Play key={path} def={{ title: pack.title, words: pack.words, size: 13, level: 'medium', seed: hashString(pack.id), message: '' }} back="/ws" navigate={navigate} />;
+    const level = LEVEL_KEYS.includes(parts[2]) ? parts[2] : null;
+    const seed = +parts[3] || 0;
+    if (!level || !seed) return <Redirect to={`/ws/pack/${pack.id}/${level || getLevel()}/${randomSeed()}`} />;
+    return <Play key={path} def={buildRound(pack, level, seed)} back="/ws" navigate={navigate} cat={pack.id}
+      again={() => navigate(`/ws/pack/${pack.id}/${level}/${randomSeed()}`)} />;
   }
   if (parts[0] === 'p') {
     const def = decodePuzzle(parts.slice(1).join('/'));
@@ -38,6 +48,11 @@ export default function WordSearch({ path, navigate }) {
     return <Play key={path} def={def} back="/ws" navigate={navigate} shared />;
   }
   return <Home navigate={navigate} />;
+}
+
+function Redirect({ to }) {
+  useEffect(() => { location.replace('#' + to); }, [to]);
+  return null;
 }
 
 function BadLink({ navigate }) {
@@ -53,32 +68,43 @@ function BadLink({ navigate }) {
 
 /* ------------------------------------------------------------------ home */
 function Home({ navigate }) {
-  const daily = dailyDef();
-  const dailyDone = store.get('games.ws.' + hashString(JSON.stringify([cleanWords(daily.words), daily.size, daily.level, daily.seed, daily.title, daily.message])))?.done;
+  const [level, setLevelState] = useState(getLevel);
+  const setLevel = l => { setLevelState(l); store.set('games.ws.level', l); };
+  const daily = dailyDef(level);
+  const dailyKey = 'games.ws.' + hashString(JSON.stringify([cleanWords(daily.words), daily.size, daily.level, daily.seed, daily.title, daily.message]));
+  const dailyDone = store.get(dailyKey)?.done;
+  const stats = store.get('games.ws.stats') || {};
   return (
     <div className="screen">
       <button className="back" onClick={() => navigate('/')}>‹ Games</button>
       <h1 className="screen-title">Word search</h1>
       <p className="screen-sub">Swipe across the letters. Or tap the first and last letter of a word.</p>
 
-      <button className="feature-card" onClick={() => navigate('/ws/daily')}>
+      <div className="field">
+        <span>Level</span>
+        <div className="seg" role="radiogroup" aria-label="Level">
+          {LEVEL_KEYS.map(k => (
+            <button key={k} role="radio" aria-checked={level === k} className={level === k ? 'on' : ''} onClick={() => setLevel(k)}>{LEVEL_CFG[k].label}</button>
+          ))}
+        </div>
+        <small>{LEVEL_CFG[level].note}</small>
+      </div>
+
+      <button className="feature-card" onClick={() => navigate('/ws/daily/' + level)}>
         <span className="kicker">Today's puzzle</span>
         <b>{daily.title.replace('Daily · ', '')}</b>
         <span>{dailyDone ? 'Solved. Come back tomorrow for a new one.' : 'A new puzzle every day, the same for everyone.'}</span>
       </button>
 
-      <h2 className="section">Choose a theme</h2>
+      <h2 className="section">Choose a category</h2>
+      <p className="small">Every round picks a fresh set of words from the category.</p>
       <div className="pack-grid">
-        {PACKS.map(p => {
-          const def = { title: p.title, words: p.words, size: 13, level: 'medium', seed: hashString(p.id), message: '' };
-          const done = store.get('games.ws.' + hashString(JSON.stringify([cleanWords(def.words), def.size, def.level, def.seed, def.title, def.message])))?.done;
-          return (
-            <button key={p.id} className="pack-card" onClick={() => navigate('/ws/pack/' + p.id)}>
-              <b>{p.title}</b><small>{p.blurb}</small>
-              {done && <span className="tick" aria-label="Solved">✓</span>}
-            </button>
-          );
-        })}
+        {PACKS.map(p => (
+          <button key={p.id} className="pack-card" onClick={() => navigate(`/ws/pack/${p.id}/${level}/${randomSeed()}`)}>
+            <b>{p.title}</b><small>{p.blurb}</small>
+            {stats[p.id] > 0 && <span className="tick" title="Rounds solved">{stats[p.id]} solved</span>}
+          </button>
+        ))}
       </div>
 
       <h2 className="section">Make one for someone</h2>
@@ -161,7 +187,7 @@ function Maker({ navigate }) {
 }
 
 /* ------------------------------------------------------------------ play */
-function Play({ def, back, navigate, shared }) {
+function Play({ def, back, navigate, shared, cat, again }) {
   const key = JSON.stringify([cleanWords(def.words), def.size, def.level, def.seed, def.title, def.message]);
   const puzzle = useMemo(() => generate(def), [key]);
   const id = hashString(key), storeKey = 'games.ws.' + id;
@@ -174,6 +200,7 @@ function Play({ def, back, navigate, shared }) {
   const [sel, setSel] = useState(null);
   const [anchor, setAnchor] = useState(null);
   const [hint, setHint] = useState(null);
+  const [paused, setPaused] = useState(false);
   const [overlay, setOverlay] = useState(false);
   const [toast, setToast] = useState('');
   const gridRef = useRef(null);
@@ -182,10 +209,11 @@ function Play({ def, back, navigate, shared }) {
   const save = patch => store.set(storeKey, { found, secs, done, hints, ...patch });
 
   useEffect(() => {
-    if (done) return;
+    if (done || paused) return;
     const t = setInterval(() => { if (!document.hidden) setSecs(s => s + 1); }, 1000);
     return () => clearInterval(t);
-  }, [done]);
+  }, [done, paused]);
+  useEffect(() => { if (paused) save({ secs }); }, [paused]);
   useEffect(() => { if (secs % 5 === 0) save({ secs }); }, [secs]);
 
   const addFound = word => {
@@ -194,7 +222,7 @@ function Play({ def, back, navigate, shared }) {
     setFound(next);
     navigator.vibrate?.(12);
     const finished = next.length === total;
-    if (finished) { setDone(true); setOverlay(true); }
+    if (finished) { setDone(true); setOverlay(true); bumpStat(cat); }
     save({ found: next, done: finished });
   };
 
@@ -205,7 +233,7 @@ function Play({ def, back, navigate, shared }) {
     return [rr, c];
   };
   const down = e => {
-    if (done) return;
+    if (done || paused) return;
     e.currentTarget.setPointerCapture(e.pointerId);
     const [r, c] = cellAt(e);
     setSel({ r0: r, c0: c, r1: r, c1: c });
@@ -234,6 +262,7 @@ function Play({ def, back, navigate, shared }) {
   };
 
   const giveHint = () => {
+    if (paused) return;
     const open = puzzle.placements.filter(p => !found.includes(p.word));
     if (!open.length || done) return;
     const p = open[Math.floor(Math.random() * open.length)];
@@ -259,11 +288,24 @@ function Play({ def, back, navigate, shared }) {
       <div className="ws-top">
         <button className="back" onClick={() => navigate(back)}>‹ Back</button>
         <div className="ws-title"><b>{def.title}</b><small>{found.length} of {total} found</small></div>
-        <span className="ws-time">{fmt(secs)}</span>
+        <button className={'ws-time' + (paused ? ' paused' : '')} onClick={() => !done && setPaused(p => !p)} disabled={done}
+          aria-label={paused ? 'Resume timer' : 'Pause timer'}>
+          <span className="t">{fmt(secs)}</span>
+          {paused
+            ? <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor" /></svg>
+            : <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" fill="currentColor" /></svg>}
+        </button>
       </div>
 
       <div className="ws-main">
         <div className="ws-board">
+          {paused && (
+            <button className="ws-pause-cover" onClick={() => setPaused(false)}>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" fill="currentColor" /></svg>
+              <b>Paused</b>
+              <span>Tap to resume</span>
+            </button>
+          )}
           <div ref={gridRef} className="ws-grid" style={{ '--n': n }}
             onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={() => setSel(null)}>
             {puzzle.grid.map((ch, i) => {
@@ -293,9 +335,9 @@ function Play({ def, back, navigate, shared }) {
           </ul>
           {puzzle.unplaced.length > 0 && <p className="small warn">{puzzle.unplaced.length} word{puzzle.unplaced.length > 1 ? 's' : ''} did not fit and {puzzle.unplaced.length > 1 ? 'were' : 'was'} left out.</p>}
           <div className="ws-actions">
-            <button onClick={giveHint} disabled={done}>Hint{hints ? ` (${hints})` : ''}</button>
+            <button onClick={giveHint} disabled={done || paused}>Hint{hints ? ` (${hints})` : ''}</button>
             <button onClick={() => shareOrCopy(url, def.title, flash)}>Share</button>
-            <button className="quiet" onClick={reset}>Start over</button>
+            {again ? <button className="quiet" onClick={again}>New round</button> : <button className="quiet" onClick={reset}>Start over</button>}
           </div>
           {hint && <p className="small">Look for <b>{hint.word}</b>. Its first letter is glowing.</p>}
         </aside>
@@ -314,7 +356,9 @@ function Play({ def, back, navigate, shared }) {
             <p>{fmt(secs)}{hints ? `, ${hints} hint${hints > 1 ? 's' : ''}` : ', no hints'}.</p>
             {def.message && <blockquote className="msg">{def.message}</blockquote>}
             <div className="dialog-actions">
-              <button className="primary" onClick={() => navigate('/ws/make')}>{shared ? 'Make one back' : 'Make your own'}</button>
+              {again
+                ? <button className="primary" onClick={again}>Another round</button>
+                : <button className="primary" onClick={() => navigate('/ws/make')}>{shared ? 'Make one back' : 'Make your own'}</button>}
               <button onClick={() => setOverlay(false)}>View grid</button>
             </div>
           </div>
