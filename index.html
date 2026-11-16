@@ -1,80 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Ledger | Table of Contents</title>
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Ms+Madi&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
-    <!-- Link to external CSS -->
-    <link rel="stylesheet" href="style.css">
-    <link href="https://github.com/NathanVanR" rel="me">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nathan van Rensburg</title>
+<meta name="description" content="A repository of sketches, scripts, and slow labor.">
+<link href="https://github.com/NathanVanR" rel="me">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=Ms+Madi&family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+/* H1-C: navigation as a row of pointed arches beneath the book; the open one fills with gold and is named above. */
+body{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;padding:1rem .6rem 1rem;overflow-x:hidden;
+  background:radial-gradient(ellipse at 50% 30%,rgba(255,200,120,.10),transparent 60%),radial-gradient(ellipse at center,var(--leather2) 0%,var(--leather) 70%,#130c07 100%)}
+.draft-tag{color:#b9a47c}
+.label{margin-top:.5rem;font:italic 1.05rem 'EB Garamond',serif;color:#e6c987;letter-spacing:.04em;min-height:1.4em;text-align:center}
+
+.ribbons.arches{gap:.3rem;overflow:visible;padding:0;justify-content:center}
+.ribbons.arches button{all:unset;box-sizing:border-box;cursor:pointer;width:34px;height:44px;font-size:0;
+  background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 17'><path d='M1 16V9C1 5 4 2 6 .5 8 2 11 5 11 9V16Z' fill='none' stroke='%23a8822f' stroke-width='1.1'/><path d='M3.4 16V10C3.4 7.5 5 5.5 6 4.4 7 5.5 8.6 7.5 8.6 10V16' fill='none' stroke='%23a8822f' stroke-width='.7' opacity='.6'/></svg>") center/16px 23px no-repeat;
+  transition:transform .35s cubic-bezier(.3,1.4,.5,1),filter .3s}
+.ribbons.arches button:hover{transform:translateY(-4px);filter:brightness(1.3)}
+.ribbons.arches button:focus-visible{outline:1px solid #e6c987;outline-offset:1px}
+.ribbons.arches button.on{transform:translateY(-3px);filter:none;
+  background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 17'><path d='M1 16V9C1 5 4 2 6 .5 8 2 11 5 11 9V16Z' fill='%23e6c987' stroke='%23e6c987' stroke-width='1.1'/><path d='M3.4 16V10C3.4 7.5 5 5.5 6 4.4 7 5.5 8.6 7.5 8.6 10V16' fill='none' stroke='%2324170f' stroke-width='.7'/></svg>") center/16px 23px no-repeat}
+@media(max-width:780px){.ribbons.arches{justify-content:center;overflow:visible;padding:0}.ribbons.arches button{width:38px}}
+
+/* the nave replaces the cathedral on the title page */
+.title-page .nave{display:block;width:min(150px,46%);height:auto;margin:0 auto .3rem;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.title-page .nave .ln{stroke:var(--ink)}.title-page .nave .ln.g{stroke:var(--gold)}
+</style>
 </head>
 <body>
+<main class="book" id="book">
+  <div class="page left"></div>
+  <div class="page right"></div>
+  <button class="corner p" aria-label="Previous leaf"></button>
+  <button class="corner n" aria-label="Next leaf"></button>
+</main>
+<div class="label" id="label"></div>
+<nav class="ribbons arches" id="ribbons" aria-label="Sections"></nav>
 
-    <div class="container fade-in">
-        <header>
-            <h1>The Ledger</h1>
-            <div class="subtitle">A repository of sketches, scripts, and slow labor.</div>
-        </header>
-
-        <nav>
-            <ol class="toc">
-                <li class="toc-item">
-                    <span class="toc-number">I.</span>
-                    <a href="#" class="toc-title" id="projects-toggle">Projects & Professional Practice</a>
-                    <p class="toc-description">The formal archive of labor, technical certifications, and systemic architecture.</p>
-
-                    <!-- New Projects Section -->
-                    <div id="projects-section">
-                        <hr>
-                        <ul class="project-list">
-                            <li class="project-item">
-                                <h3>FNB DataQuest Recommender System</h3>
-                                <p class="metadata">Collaborative Filtering | Python, Pandas, NumPy, Scikit-learn</p>
-                                <p>This project involved building a customized collaborative filtering recommender system for the FNB DataQuest hackathon. Architected similarly to the famous Netflix Prize matrix factorization competition, the engine analyzed historic customer transaction behaviors. Its purpose was to predict and rank the top 5 financial products a user would interact with next.</p>
-                                <a href="https://github.com/NathanVanR/fnb-data-quest" target="_blank">View on GitHub</a>
-                            </li>
-                            
-                            <li class="project-item">
-                                <h3>Harvest</h3>
-                                <p class="metadata">[Active Development] | Web Architecture | Springboot, Java</p>
-                                <p>An application built to bridge the gap in the agricultural supply chain by allowing consumers to purchase produce directly from small and micro-scale farmers. The platform focuses on connecting customers to local growers, enabling small-scale producers to generate income.</p>
-                                <a href="https://github.com/NathanVanR/harveset" target="_blank">View on GitHub</a>
-                            </li>
-
-                            <li class="project-item">
-                                <h3>Photo Quality Checker</h3>
-                                <p class="metadata">[Active Development] | Data Science | Computer Vision</p>
-                                <p>A data science utility developed to programmatically analyze and determine whether a given photograph meets quality thresholds. The system leverages computer vision and statistical analysis to evaluate photographic attributes, filtering out bad captures based on underlying structural data.</p>
-                                <a href="https://github.com/NathanVanR/photo-quality-checker" target="_blank">View on GitHub</a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-
-                <li class="toc-item">
-                    <span class="toc-number">II.</span>
-                    <a href="https://www.youtube.com/@nvanrensburg" target="_blank" class="toc-title">Steel & Scrolls</a>
-                    <p class="toc-description">Inquiries into classical literature and the cinematic frame. Where the sword meets the pen.</p>
-                </li>
-
-                <li class="toc-item">
-                    <span class="toc-number">III.</span>
-                    <a href="folio.html" class="toc-title">The Folio</a>
-                    <p class="toc-description">Sketches and verses composed in the quiet hours.</p>
-                    <span class="marginalia">"Ink on paper is the only truth."</span>
-                </li>
-
-            </ol>
-        </nav>
-
-        <footer>
-            <p>Constructed in the tradition of Digital Minimalism. <br> No trackers. No cookies. Just text.</p>
-        </footer>
-    </div>
-
-    <!-- Link to external JS -->
-    <script src="script.js"></script>
+<script src="assets/draw.js"></script>
+<script src="assets/content.js"></script>
+<script src="assets/book.js"></script>
+<script>
+/* title page: the nave drawn in perspective instead of the west front */
+CONTENT[0].L = () => `<div class="title-page">${DRAW.nave().replace('viewBox="0 -90 800 610"','viewBox="248 -56 304 488"')}
+  <h1 class="write">Nathan<br>van Rensburg</h1>
+  <div class="rise" style="--d:3.0s"><p class="sub">A repository of sketches, scripts, and slow labor.</p></div>
+  ${DRAW.flourish()}
+  <div class="rise" style="--d:3.5s"><p class="meta">Software maker · South Africa<br><span class="todo">your city / one-line tagline</span></p></div>
+</div><div class="folio">i</div>`;
+</script>
+<script>
+const label = document.getElementById('label');
+const start = Math.max(0, 2 * CONTENT.findIndex(s => '#' + s.id === location.hash));
+createBook({
+  root: document.getElementById('book'), spreads: CONTENT, ribbons: document.getElementById('ribbons'),
+  counter: label, start,
+  onTurn: p => { label.textContent = CONTENT[p >> 1].label; }
+});
+document.querySelectorAll('#ribbons button').forEach((b, i) => { b.title = CONTENT[i].label; b.setAttribute('aria-label', CONTENT[i].label); });
+</script>
 </body>
 </html>
+
+
