@@ -7,6 +7,11 @@ export const THEMES = {
   village: { label: 'Village', top: '#aee0ff', bottom: '#eaf7ff', ground: '#86bd70', horizon: 255, sky: ['cloud', 'sun', 'bird', 'balloon', 'cloud'], land: ['house', 'tree', 'tree', 'flower', 'flower', 'fence', 'rock', 'house'] },
   night: { label: 'Night', top: '#0c1736', bottom: '#33437a', ground: '#1d3a30', horizon: 262, sky: ['moon', 'star', 'star', 'star', 'cloud', 'bat', 'star'], land: ['tower', 'tree', 'house', 'lantern', 'lantern', 'mushroom', 'tree'] },
   sea: { label: 'Under the sea', top: '#7dd3f7', bottom: '#1d6fa8', ground: '#e0c58a', horizon: 330, sky: ['fish', 'fish', 'bubble', 'bubble', 'jellyfish', 'fish', 'bubble'], land: ['seaweed', 'shell', 'starfish', 'crab', 'seaweed', 'rock', 'starfish'] },
+  space: { label: 'Outer space', top: '#04061a', bottom: '#2b2060', ground: '#4b4570', horizon: 322, sky: ['planet', 'star', 'star', 'comet', 'ufo', 'moon', 'star', 'planet'], land: ['rocket', 'crater', 'astronaut', 'flag', 'crater', 'rocket'] },
+  farm: { label: 'Farm', top: '#bde5ff', bottom: '#f3fbff', ground: '#86c268', horizon: 252, sky: ['cloud', 'sun', 'bird', 'cloud', 'bird'], land: ['barn', 'cow', 'sheep', 'tree', 'haybale', 'fence', 'chicken', 'flower'] },
+  winter: { label: 'Winter', top: '#b6d2ee', bottom: '#f1f7ff', ground: '#f3f7fb', horizon: 258, sky: ['cloud', 'snowflake', 'snowflake', 'bird', 'snowflake', 'cloud'], land: ['snowman', 'pinesnow', 'igloo', 'sled', 'pinesnow', 'snowman', 'lantern'] },
+  safari: { label: 'Safari', top: '#ffd49a', bottom: '#fff4d9', ground: '#d8b468', horizon: 262, sky: ['sun', 'cloud', 'bird', 'bird', 'cloud'], land: ['acacia', 'giraffe', 'elephant', 'zebra', 'bush', 'rock', 'acacia', 'zebra'] },
+  cathedral: { label: 'Cathedral square', top: '#27335f', bottom: '#e8b878', ground: '#4d5166', horizon: 272, sky: ['moon', 'cloud', 'bird', 'star', 'bird', 'cloud'], land: ['cathedral', 'archwin', 'lantern', 'tree', 'bench', 'lantern', 'tower', 'archwin'] },
   garden: { label: 'Garden', top: '#d6efff', bottom: '#f4fbff', ground: '#78b966', horizon: 235, sky: ['cloud', 'sun', 'butterfly', 'butterfly', 'bird', 'cloud'], land: ['flower', 'flower', 'mushroom', 'tree', 'flower', 'ladybug', 'rock', 'flower'] }
 };
 export const THEME_KEYS = Object.keys(THEMES);
@@ -18,9 +23,9 @@ export const SPOT_LEVELS = {
 };
 export const SPOT_KEYS = Object.keys(SPOT_LEVELS);
 
-const FLIPPABLE = new Set(['house', 'fish', 'bird', 'butterfly', 'tower', 'bat', 'crab']);
-const VARIANT = new Set(['house', 'tree', 'flower', 'sun', 'tower']);
-const NO_COLOR = new Set(['cloud', 'bubble', 'star', 'moon', 'rock', 'bat']);
+const FLIPPABLE = new Set(['house', 'fish', 'bird', 'butterfly', 'tower', 'bat', 'crab', 'cow', 'sheep', 'giraffe', 'elephant', 'zebra', 'chicken', 'sled', 'astronaut', 'barn']);
+const VARIANT = new Set(['house', 'tree', 'flower', 'sun', 'tower', 'planet', 'snowman', 'barn', 'acacia', 'archwin']);
+const NO_COLOR = new Set(['cloud', 'bubble', 'star', 'moon', 'rock', 'bat', 'snowflake', 'haybale', 'crater', 'igloo', 'comet', 'pinesnow']);
 
 const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
 
