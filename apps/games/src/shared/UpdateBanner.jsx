@@ -1,8 +1,13 @@
+import { useEffect, useState } from 'react';
 import { useRegisterSW } from 'virtual:pwa-register/react';
 
-/** Shows "new version ready" when a fresh build has been downloaded, and reloads into it on tap. */
+/**
+ * A new build installs and takes over as soon as it is downloaded (so nobody is stuck on an old copy),
+ * and this banner tells you to reload so the page itself switches to the new version too.
+ */
 export default function UpdateBanner() {
-  const { needRefresh: [needRefresh], updateServiceWorker } = useRegisterSW({
+  const [ready, setReady] = useState(false);
+  useRegisterSW({
     onRegisteredSW(_url, registration) {
       if (!registration) return;
       const check = () => registration.update().catch(() => {});
@@ -10,11 +15,18 @@ export default function UpdateBanner() {
       document.addEventListener('visibilitychange', () => { if (!document.hidden) check(); });
     }
   });
-  if (!needRefresh) return null;
+  useEffect(() => {
+    if (!('serviceWorker' in navigator)) return;
+    const hadController = !!navigator.serviceWorker.controller;      // false on a first install
+    const onChange = () => { if (hadController) setReady(true); };
+    navigator.serviceWorker.addEventListener('controllerchange', onChange);
+    return () => navigator.serviceWorker.removeEventListener('controllerchange', onChange);
+  }, []);
+  if (!ready) return null;
   return (
     <div className="update-banner" role="status">
       <span>A new version is ready.</span>
-      <button className="primary" onClick={() => updateServiceWorker(true)}>Reload</button>
+      <button className="primary" onClick={() => location.reload()}>Reload</button>
     </div>
   );
 }
