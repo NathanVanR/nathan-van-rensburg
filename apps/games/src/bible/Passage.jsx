@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { BOOKS, parseRef, makeRef, refLabel, refShort, parseCode } from './books.js';
+import { BOOKS, makeRef, refLabel, refShort, parseCode } from './books.js';
 import { loadPassage } from './data.js';
 
 /** Load a passage from a ref code like "43.3.16-18". */
@@ -20,14 +20,12 @@ export function usePassage(code) {
 
 /**
  * The one way every Bible game picks what to play: a book, a chapter, and optionally a range of verses.
- * Written the short way that is chN or chNvA-B (for example ch3 or ch3v16-18), or typed as "John 3:16-18".
  */
 export function PassagePicker({ value, onChange }) {
   const [book, setBook] = useState(value?.book ?? 43);
   const [chapter, setChapter] = useState(value?.chapter ?? 3);
   const [from, setFrom] = useState(value?.from ?? '');
   const [to, setTo] = useState(value?.to ?? '');
-  const [text, setText] = useState('');
   const [error, setError] = useState('');
   const b = BOOKS[book - 1];
 
@@ -47,22 +45,10 @@ export function PassagePicker({ value, onChange }) {
   const pickBook = n => { setBook(n); setChapter(1); setFrom(''); setTo(''); emit(n, 1, '', ''); };
   const pickChapter = n => { setChapter(n); setFrom(''); setTo(''); emit(book, n, '', ''); };
   const setVerse = (f, t) => { setFrom(f); setTo(t); emit(book, chapter, f, t); };
-  const typedGo = e => {
-    e.preventDefault();
-    const ref = parseRef(text, book);
-    if (!ref) return setError('Try something like "John 3", "Psalm 23:1-6", or ch3v16-18.');
-    setError(''); setText('');
-    setBook(ref.book); setChapter(ref.chapter); setFrom(ref.from ?? ''); setTo(ref.to ?? '');
-    onChange(ref);
-  };
 
   const current = makeRef(book, chapter, from === '' ? null : +from, from === '' ? null : +(to || from));
   return (
     <div className="picker">
-      <form className="picker-quick" onSubmit={typedGo}>
-        <input value={text} onChange={e => setText(e.target.value)} placeholder='Type a passage, e.g. Psalm 23 or John 3:16-18' aria-label="Type a passage" />
-        <button type="submit">Go</button>
-      </form>
       <div className="picker-row">
         <label className="field"><span>Book</span>
           <select value={book} onChange={e => pickBook(+e.target.value)}>
