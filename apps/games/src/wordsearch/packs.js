@@ -187,8 +187,8 @@ export const PACKS = [
 
 /** Three levels: how many words, how long they may be, how big the grid is, and which directions words may run. */
 export const LEVEL_CFG = {
-  easy:   { label: 'Easy',   count: 8,  min: 3, max: 7,  size: 10, note: '8 short words. Across and down only.' },
-  medium: { label: 'Medium', count: 12, min: 4, max: 10, size: 13, note: '12 words. Diagonals too.' },
+  easy:   { label: 'Easy',   count: 8,  min: 3, max: 7,  size: 10, note: '8 short words. Forwards only.' },
+  medium: { label: 'Medium', count: 12, min: 4, max: 10, size: 13, note: '12 words. Some run backwards or upwards.' },
   hard:   { label: 'Hard',   count: 14, min: 6, max: 14, size: 15, note: '14 longer words. Every direction, backwards too.' }
 };
 export const LEVEL_KEYS = Object.keys(LEVEL_CFG);

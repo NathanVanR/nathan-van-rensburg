@@ -24,8 +24,8 @@ export function cleanWords(list) {
 
 // [row step, column step]
 const DIRS = {
-  easy: [[0, 1], [1, 0]],
-  medium: [[0, 1], [1, 0], [1, 1], [-1, 1]],
+  easy: [[0, 1], [1, 0], [1, 1]],
+  medium: [[0, 1], [1, 0], [1, 1], [-1, 1], [0, -1], [-1, 0]],
   hard: [[0, 1], [1, 0], [1, 1], [-1, 1], [0, -1], [-1, 0], [-1, -1], [1, -1]]
 };
 export const LEVELS = ['easy', 'medium', 'hard'];
@@ -59,11 +59,19 @@ function build(list, n, level, seed) {
   const grid = new Array(n * n).fill('');
   const dirs = DIRS[level] || DIRS.medium;
   const placements = [], unplaced = [];
+  // Deal the allowed directions out like a shuffled deck, so words spread over all of them
+  // instead of piling onto whichever direction happened to fit first.
+  let deck = [];
+  const deal = () => {
+    if (!deck.length) { deck = dirs.slice(); for (let i = deck.length - 1; i > 0; i--) { const j = (rand() * (i + 1)) | 0; [deck[i], deck[j]] = [deck[j], deck[i]]; } }
+    return deck.pop();
+  };
 
   for (const word of list) {
     let placed = false;
+    const wanted = deal();
     for (let attempt = 0; attempt < 400 && !placed; attempt++) {
-      const [dr, dc] = dirs[(rand() * dirs.length) | 0];
+      const [dr, dc] = attempt < 150 ? wanted : dirs[(rand() * dirs.length) | 0];
       const r0 = (rand() * n) | 0, c0 = (rand() * n) | 0;
       const r1 = r0 + dr * (word.length - 1), c1 = c0 + dc * (word.length - 1);
       if (r1 < 0 || r1 >= n || c1 < 0 || c1 >= n) continue;

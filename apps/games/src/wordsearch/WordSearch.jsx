@@ -6,7 +6,7 @@ import {
 import { PACKS, packById, dailyDef, buildRound, LEVEL_CFG, LEVEL_KEYS, randomSeed } from './packs.js';
 
 const COLORS = ['#b8412f', '#2f6aa8', '#2f8a63', '#b8892b', '#7a4a9c', '#c0567c', '#3b8a96', '#8a6a3a'];
-const LEVEL_NOTE = { easy: 'Across and down', medium: 'Plus diagonals', hard: 'Every direction, backwards too' };
+const LEVEL_NOTE = { easy: 'Across, down and diagonal', medium: 'Most directions, some backwards', hard: 'Every direction, backwards too' };
 const fmt = s => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
 const store = {
   get: k => { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } },

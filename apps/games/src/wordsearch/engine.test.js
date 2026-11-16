@@ -26,9 +26,21 @@ test('the same seed gives the same puzzle, a different seed a different one', ()
   assert.notDeepEqual(a.grid, c.grid);
 });
 
-test('easy puzzles only run left to right or top to bottom', () => {
+test('easy puzzles only run forwards: across, down or diagonally down', () => {
   const p = generate({ words: WORDS, size: 12, level: 'easy', seed: 5 });
-  assert.ok(p.placements.every(pl => pl.dr >= 0 && pl.dc >= 0 && pl.dr + pl.dc === 1));
+  assert.ok(p.placements.every(pl => pl.dr >= 0 && pl.dc >= 0 && pl.dr + pl.dc >= 1));
+});
+
+test('words spread over the allowed directions instead of piling onto a few', () => {
+  const need = { easy: 3, medium: 5, hard: 7 };
+  for (const level of ['easy', 'medium', 'hard']) for (let seed = 1; seed <= 20; seed++) {
+    const p = generate({ words: WORDS, size: 13, level, seed });
+    const count = {};
+    p.placements.forEach(pl => { const k = pl.dr + ',' + pl.dc; count[k] = (count[k] || 0) + 1; });
+    const used = Object.keys(count).length, biggest = Math.max(...Object.values(count));
+    assert.ok(used >= Math.min(need[level], 3), `${level} seed ${seed}: only ${used} directions`);
+    assert.ok(biggest <= Math.ceil(p.placements.length / 2), `${level} seed ${seed}: one direction has ${biggest} of ${p.placements.length}`);
+  }
 });
 
 test('selections match a word forwards and backwards', () => {
