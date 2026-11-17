@@ -23,9 +23,11 @@ export const SPOT_LEVELS = {
 };
 export const SPOT_KEYS = Object.keys(SPOT_LEVELS);
 
-const FLIPPABLE = new Set(['house', 'fish', 'bird', 'butterfly', 'tower', 'bat', 'crab', 'cow', 'sheep', 'giraffe', 'elephant', 'zebra', 'chicken', 'sled', 'astronaut', 'barn']);
+// Only shapes that look different when mirrored may be flipped (symmetric ones would show no change).
+export const FLIPPABLE = new Set(['house', 'fish', 'cow', 'sheep', 'giraffe', 'elephant', 'zebra', 'chicken', 'sled', 'butterfly']);
 const VARIANT = new Set(['house', 'tree', 'flower', 'sun', 'tower', 'planet', 'snowman', 'barn', 'acacia', 'archwin']);
-const NO_COLOR = new Set(['cloud', 'bubble', 'star', 'moon', 'rock', 'bat', 'snowflake', 'haybale', 'crater', 'igloo', 'comet', 'pinesnow']);
+// Shapes whose drawing ignores the hue, so a colour change would be invisible.
+export const NO_COLOR = new Set(['cloud', 'bubble', 'star', 'moon', 'rock', 'bat', 'snowflake', 'haybale', 'crater', 'igloo', 'comet', 'pinesnow', 'bird', 'fence', 'cow', 'sheep', 'giraffe', 'zebra']);
 
 const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
 
